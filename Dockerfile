@@ -1,4 +1,5 @@
 
+
 FROM node:20-alpine
 
 RUN apk add --no-cache unzip
@@ -15,4 +16,4 @@ RUN unzip -q /tmp/abi.zip -d /app \
 
 ENV NODE_ENV=production
 
-CMD ["sh", "-c", "APP_DIR=$(dirname \"$(find /app -name package.json -print -quit)\") && cd \"$APP_DIR\" && npm start"]
+CMD ["sh", "-c", "APP_DIR=$(dirname \"$(find /app -name package.json -print -quit)\") && cd \"$APP_DIR\" && node server.js"]
