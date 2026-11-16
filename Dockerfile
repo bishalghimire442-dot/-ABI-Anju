@@ -5,7 +5,7 @@ RUN apk add --no-cache unzip
 
 WORKDIR /app
 
-COPY ABI_v2_16_1_AnjuSmriti_Gemini_NepaliVoice.zip /tmp/abi.zip
+COPY ABI_v2_22_1_Pyari_Gemini_PDF_Backup_Candidate.zip /tmp/abi.zip
 
 RUN unzip -q /tmp/abi.zip -d /app \
     && test -f /app/ABI_v2_16/package.json \
