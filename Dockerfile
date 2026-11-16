@@ -8,11 +8,10 @@ WORKDIR /app
 COPY ABI_v2_16_1_AnjuSmriti_Gemini_NepaliVoice.zip /tmp/abi.zip
 
 RUN unzip -q /tmp/abi.zip -d /app \
-    && APP_DIR="$(dirname "$(find /app -name package.json -print -quit)")" \
-    && test -f "$APP_DIR/package.json" \
-    && cd "$APP_DIR" \
+    && test -f /app/ABI_v2_16/package.json \
+    && cd /app/ABI_v2_16 \
     && npm install --omit=dev
 
 ENV NODE_ENV=production
 
-CMD ["sh", "-c", "APP_DIR=$(dirname \"$(find /app -name package.json -print -quit)\") && cd \"$APP_DIR\" && node server.js"]
+CMD ["sh", "-c", "cd /app/ABI_v2_16 && node ./server.js"]
