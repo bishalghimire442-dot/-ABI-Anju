@@ -1,16 +1,18 @@
 
 FROM node:20-alpine
 
+RUN apk add --no-cache unzip
+
 WORKDIR /app
 
-COPY package*.json ./
+COPY ABI_v2_16_1_AnjuSmriti_Gemini_NepaliVoice.zip /tmp/abi.zip
 
-RUN npm install --omit=dev
-
-COPY . .
+RUN unzip -q /tmp/abi.zip -d /app \
+    && APP_DIR="$(dirname "$(find /app -name package.json -print -quit)")" \
+    && test -f "$APP_DIR/package.json" \
+    && cd "$APP_DIR" \
+    && npm install --omit=dev
 
 ENV NODE_ENV=production
 
-EXPOSE 10000
-
-CMD ["npm", "start"]
+CMD ["sh", "-c", "APP_DIR=$(dirname \"$(find /app -name package.json -print -quit)\") && cd \"$APP_DIR\" && npm start"]
