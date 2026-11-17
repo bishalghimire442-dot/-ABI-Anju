@@ -1,17 +1,16 @@
 
 FROM node:20-alpine
 
-RUN apk add --no-cache unzip
-
 WORKDIR /app
 
-COPY ABI_v2_26_1_Pyari_Response_Gate_Tested.zip /tmp/abi.zip
+COPY package*.json ./
 
-RUN unzip -q /tmp/abi.zip -d /app \
-    && test -f /app/ABI_v2_16/package.json \
-    && cd /app/ABI_v2_16 \
-    && npm install --omit=dev
+RUN npm install --omit=dev
+
+COPY . .
 
 ENV NODE_ENV=production
 
-CMD ["sh", "-c", "cd /app/ABI_v2_16 && node ./server.js"]
+EXPOSE 10000
+
+CMD ["npm", "start"]
