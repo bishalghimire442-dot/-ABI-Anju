@@ -1,23 +1,27 @@
 
-FROM node:20-alpine
+# ABI Anju v2.40.0
+# Build directly from uploaded GitHub ZIP
 
-RUN apk add --no-cache unzip
+FROM node:20-alpine
 
 WORKDIR /app
 
-COPY ABI_v2_39_0_Anju_Conversation_Icons.zip /tmp/abi.zip
+# Install ZIP extraction utility
+RUN apk add --no-cache unzip
 
-RUN unzip -q /tmp/abi.zip -d /app \
-    && APP_DIR="$(dirname "$(find /app -name package.json -not -path '*/node_modules/*' -print -quit)")" \
-    && test -f "$APP_DIR/package.json" \
-    && printf '%s' "$APP_DIR" > /app/.abi-app-dir
+# Copy uploaded ZIP bundle
+COPY ABI_Anju_v2_40_0_GitHub_Staging_Bundle.zip /tmp/abi-bundle.zip
 
-RUN APP_DIR="$(cat /app/.abi-app-dir)" \
-    && cd "$APP_DIR" \
-    && npm install --omit=dev
+# Extract ABI project into application directory
+RUN unzip -q /tmp/abi-bundle.zip -d /tmp/abi-bundle \
+    && cp -a /tmp/abi-bundle/ABI_v2_40_0/. /app/ \
+    && rm -rf /tmp/abi-bundle /tmp/abi-bundle.zip
+
+# Install production dependencies
+RUN npm install --omit=dev
 
 ENV NODE_ENV=production
 
 EXPOSE 10000
 
-CMD ["sh", "-c", "APP_DIR=$(cat /app/.abi-app-dir) && cd \"$APP_DIR\" && npm start"]
+CMD ["npm", "start"]
